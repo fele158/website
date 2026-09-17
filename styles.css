@@ -1368,6 +1368,23 @@ body.cal-open { overflow: hidden; }
   margin-top: 0.3rem;
 }
 
+/* Πλαίσιο πορτρέτου με πραγματική φωτογραφία (αντί για το λογότυπο) */
+.about-portrait--photo { background: var(--sand); }
+.about-portrait--photo img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  object-fit: cover;
+  object-position: center 18%;
+  filter: none;
+}
+.about-portrait--photo .about-portrait-caption {
+  background: linear-gradient(0deg, rgba(43, 20, 49, 0.82) 0%, rgba(43, 20, 49, 0.45) 45%, transparent 100%);
+  padding-top: 3.2rem;
+}
+.about-portrait--photo .about-portrait-caption .name { color: var(--white); }
+.about-portrait--photo .about-portrait-caption .role { color: var(--blush); }
+
 .hours-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -1388,3 +1405,159 @@ body.cal-open { overflow: hidden; }
   margin: 0 0 0.5rem;
 }
 .hours-card p { margin: 0.15rem 0; color: var(--ink-soft); }
+
+/* ---------- Email button: κρατάει πεζά (δεν είναι label, είναι διεύθυνση) ---------- */
+.btn-email {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 0.86rem;
+}
+
+/* ---------- Σύνδεσμοι προς Google Maps ---------- */
+.footer-map {
+  display: inline-block;
+  font-size: 0.84rem;
+  color: var(--blush);
+  opacity: 0.85;
+  border-bottom: 1px solid rgba(233, 215, 238, 0.35);
+  transition: opacity .3s var(--ease), color .3s var(--ease);
+}
+.footer-map:hover { opacity: 1; color: var(--white); }
+
+.map-link { display: block; color: inherit; }
+.map-link-cta {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mocha);
+  transition: transform .3s var(--ease), color .3s var(--ease);
+}
+.map-link:hover .map-link-cta { color: var(--rose-deep); transform: translateX(3px); }
+
+.map-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 1.3rem 0 0;
+}
+
+/* ---------- Φωτογραφίες ιατρείου ---------- */
+.gallery-group { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+.gallery-group:last-child { margin-bottom: 0; }
+.gallery-group > h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem);
+  color: var(--cocoa);
+  margin: 0 0 1.4rem;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(0.9rem, 2vw, 1.4rem);
+}
+/* Στην αρχική: 3 στήλες, ώστε οι 6 φωτογραφίες να γεμίζουν 2 καθαρές σειρές */
+@media (min-width: 860px) {
+  .gallery-grid--home { grid-template-columns: repeat(3, 1fr); }
+}
+
+.shot {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--sand);
+  box-shadow: 0 24px 48px -32px rgba(61, 42, 66, 0.55);
+  transition: transform .5s var(--ease), box-shadow .5s var(--ease);
+  cursor: zoom-in;
+}
+.shot img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  transition: transform .7s var(--ease);
+}
+.shot:hover { transform: translateY(-4px); box-shadow: 0 34px 64px -30px rgba(61, 42, 66, 0.6); }
+.shot:hover img { transform: scale(1.04); }
+.shot:focus-visible { outline: 2px solid var(--rose-deep); outline-offset: 3px; }
+.shot--tall img { aspect-ratio: 3 / 4; }
+
+.gallery-note {
+  margin-top: clamp(2.2rem, 4vw, 3rem);
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  font-style: italic;
+  border-left: 2px solid var(--line);
+  padding-left: 1.1rem;
+}
+
+/* Lightbox */
+.lb {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 3rem);
+  background: rgba(35, 20, 40, 0.92);
+  opacity: 0;
+  transition: opacity .3s var(--ease);
+}
+.lb.open { display: flex; }
+.lb.shown { opacity: 1; }
+.lb img {
+  max-width: 100%;
+  max-height: 78vh;
+  border-radius: 10px;
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.8);
+}
+.lb-cap {
+  position: absolute;
+  left: 0; right: 0; bottom: clamp(0.8rem, 2vw, 1.6rem);
+  text-align: center;
+  color: var(--sand);
+  font-size: 0.84rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.lb-btn {
+  position: absolute;
+  background: none;
+  border: 0;
+  color: var(--sand);
+  font-family: var(--sans);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.6rem 0.9rem;
+  opacity: 0.75;
+  transition: opacity .3s var(--ease);
+}
+.lb-btn:hover { opacity: 1; }
+.lb-close { top: clamp(0.5rem, 2vw, 1.4rem); right: clamp(0.5rem, 2vw, 1.4rem); font-size: 2rem; }
+.lb-prev, .lb-next { top: 50%; transform: translateY(-50%); font-size: 2.6rem; }
+.lb-prev { left: clamp(0.1rem, 1vw, 1rem); }
+.lb-next { right: clamp(0.1rem, 1vw, 1rem); }
+body.lb-open { overflow: hidden; }
+
+/* ---------- Εικόνα μέσα σε κείμενο υπηρεσίας ---------- */
+.svc-figure {
+  margin: clamp(1.8rem, 4vw, 2.6rem) auto;
+  max-width: 430px;
+}
+.svc-figure img {
+  width: 100%;
+  border-radius: var(--radius);
+  box-shadow: 0 30px 60px -34px rgba(61, 42, 66, 0.55);
+}
+.svc-figure figcaption {
+  margin-top: 0.9rem;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--mocha);
+  text-align: center;
+}

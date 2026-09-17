@@ -1,4 +1,4 @@
-// Δρ. Ιωάννης Φελεσάκης — shared UI behaviour
+// Dr. Ιωάννης Φελεσάκης — shared UI behaviour
 (function () {
   // Current year
   var y = document.getElementById("year");
@@ -54,6 +54,64 @@
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
+  // Lightbox για τις φωτογραφίες του ιατρείου
+  var shots = Array.prototype.slice.call(document.querySelectorAll(".shot"));
+  if (shots.length) {
+    var box = document.createElement("div");
+    box.className = "lb";
+    box.setAttribute("role", "dialog");
+    box.setAttribute("aria-modal", "true");
+    box.setAttribute("aria-label", "Φωτογραφίες ιατρείου");
+    box.innerHTML =
+      '<button class="lb-btn lb-close" type="button" aria-label="Κλείσιμο">&times;</button>' +
+      '<button class="lb-btn lb-prev" type="button" aria-label="Προηγούμενη">&#8249;</button>' +
+      '<img alt="" />' +
+      '<button class="lb-btn lb-next" type="button" aria-label="Επόμενη">&#8250;</button>' +
+      '<p class="lb-cap"></p>';
+    document.body.appendChild(box);
+
+    var pic = box.querySelector("img");
+    var cap = box.querySelector(".lb-cap");
+    var at = 0;
+    var last = null;
+
+    var show = function (i) {
+      at = (i + shots.length) % shots.length;
+      var a = shots[at];
+      pic.src = a.getAttribute("href");
+      pic.alt = a.querySelector("img") ? a.querySelector("img").alt : "";
+      cap.textContent = a.getAttribute("data-caption") || pic.alt;
+    };
+    var open = function (i) {
+      last = document.activeElement;
+      show(i);
+      box.classList.add("open");
+      document.body.classList.add("lb-open");
+      requestAnimationFrame(function () { box.classList.add("shown"); });
+      box.querySelector(".lb-close").focus();
+    };
+    var close = function () {
+      box.classList.remove("shown");
+      document.body.classList.remove("lb-open");
+      window.setTimeout(function () { box.classList.remove("open"); pic.removeAttribute("src"); }, 300);
+      if (last) last.focus();
+    };
+
+    shots.forEach(function (a, i) {
+      a.addEventListener("click", function (e) { e.preventDefault(); open(i); });
+    });
+    box.querySelector(".lb-close").addEventListener("click", close);
+    box.querySelector(".lb-prev").addEventListener("click", function () { show(at - 1); });
+    box.querySelector(".lb-next").addEventListener("click", function () { show(at + 1); });
+    box.addEventListener("click", function (e) { if (e.target === box) close(); });
+    document.addEventListener("keydown", function (e) {
+      if (!box.classList.contains("open")) return;
+      if (e.key === "Escape") close();
+      else if (e.key === "ArrowLeft") show(at - 1);
+      else if (e.key === "ArrowRight") show(at + 1);
+    });
   }
 
   // Reveal on scroll
