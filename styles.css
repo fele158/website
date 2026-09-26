@@ -1549,7 +1549,9 @@ body.lb-open { overflow: hidden; }
   max-width: 430px;
 }
 .svc-figure img {
+  display: block;
   width: 100%;
+  height: auto;
   border-radius: var(--radius);
   box-shadow: 0 30px 60px -34px rgba(61, 42, 66, 0.55);
 }
