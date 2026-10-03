@@ -56,6 +56,22 @@
     window.addEventListener("scroll", onScroll, { passive: true });
   }
 
+  // Επανάληψη φόρτωσης φωτογραφίας αν αποτύχει (π.χ. ασταθές δίκτυο κινητού)
+  Array.prototype.forEach.call(document.querySelectorAll(".shot img"), function (img) {
+    var src = img.getAttribute("src");
+    var tries = 0;
+    var retry = function () {
+      if (tries >= 3) return;
+      tries += 1;
+      window.setTimeout(function () {
+        img.src = src + "?r=" + tries;
+      }, tries * 1200);
+    };
+    img.addEventListener("error", retry);
+    // Αν απέτυχε πριν τρέξει το script
+    if (img.complete && img.naturalWidth === 0) retry();
+  });
+
   // Lightbox για τις φωτογραφίες του ιατρείου
   var shots = Array.prototype.slice.call(document.querySelectorAll(".shot"));
   if (shots.length) {
